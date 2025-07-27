@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: service-aggregation
+
+  web:
+    reactive:
+      base-path: /api
+
+# Настройки внешних сервисов
+external-services:
+  first-service-url: http://first-service/api/data
+  second-service-url: http://second-service/api/data
+
+# Настройки OpenAPI (Springdoc)
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+  info:
+    title: Aggregation Service API
+    version: 1.0.0
+    description: Сервис агрегации данных из внешних источников
