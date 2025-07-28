@@ -24,3 +24,10 @@ springdoc:
     title: Aggregation Service API
     version: 1.0.0
     description: Сервис агрегации данных из внешних источников
+
+logging:
+  starter:
+    log-controllers: true
+    log-services: true
+    log-web-requests: true
+    log-level: INFO

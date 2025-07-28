@@ -53,6 +53,13 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
+
+        <!-- Модуль логирования -->
+        <dependency>
+            <groupId>ru.vpavlova</groupId>
+            <artifactId>logging-starter</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>
