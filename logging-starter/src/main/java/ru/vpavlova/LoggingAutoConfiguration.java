@@ -10,6 +10,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.server.WebFilter;
 
 @AutoConfiguration
 @ConditionalOnWebApplication
@@ -41,4 +42,12 @@ public class LoggingAutoConfiguration {
                 .filter(LoggingWebClientFilter.logRequest())
                 .filter(LoggingWebClientFilter.logResponse());
     }
+
+    @Bean
+    @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
+    @ConditionalOnProperty(name = "logging.starter.log-web", havingValue = "true")
+    public WebFilter loggingReactiveWebFilter() {
+        return new ReactiveLoggingWebFilter();
+    }
+
 }
