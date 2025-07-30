@@ -17,6 +17,9 @@ import org.springframework.web.server.WebFilter;
 @EnableConfigurationProperties(LoggingProperties.class)
 public class LoggingAutoConfiguration {
 
+    /**
+     * Логирует HTTP-запросы/ответы (Servlet API)
+     */
     @Bean
     @ConditionalOnProperty(name = "logging.starter.log-web", havingValue = "true")
     public FilterRegistrationBean<LoggingWebFilter> loggingFilterRegistration() {
@@ -26,6 +29,9 @@ public class LoggingAutoConfiguration {
         return registration;
     }
 
+    /**
+     * Логирует HTTP-запросы через RestTemplate.
+     */
     @Bean
     @ConditionalOnClass(RestTemplate.class)
     @ConditionalOnProperty(name = "logging.starter.log-web", havingValue = "true")
@@ -34,6 +40,9 @@ public class LoggingAutoConfiguration {
                 .add(new LoggingRestTemplateInterceptor());
     }
 
+    /**
+     * Логирует HTTP-запросы через WebClient.
+     */
     @Bean
     @ConditionalOnClass(WebClient.class)
     @ConditionalOnProperty(name = "logging.starter.log-web", havingValue = "true")
@@ -43,6 +52,9 @@ public class LoggingAutoConfiguration {
                 .filter(LoggingWebClientFilter.logResponse());
     }
 
+    /**
+     * Логирует HTTP-запросы/ответы в реактивных приложениях (WebFlux)
+     */
     @Bean
     @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.REACTIVE)
     @ConditionalOnProperty(name = "logging.starter.log-web", havingValue = "true")
