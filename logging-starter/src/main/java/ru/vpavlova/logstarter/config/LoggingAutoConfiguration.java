@@ -1,4 +1,4 @@
-package ru.vpavlova;
+package ru.vpavlova.logstarter.config;
 
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
@@ -11,6 +11,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.server.WebFilter;
+import ru.vpavlova.logstarter.filter.LoggingWebClientFilter;
+import ru.vpavlova.logstarter.filter.LoggingWebFilter;
+import ru.vpavlova.logstarter.filter.ReactiveLoggingWebFilter;
+import ru.vpavlova.logstarter.properties.LoggingProperties;
+import ru.vpavlova.logstarter.resttemplate.LoggingRestTemplateInterceptor;
 
 @AutoConfiguration
 @ConditionalOnWebApplication

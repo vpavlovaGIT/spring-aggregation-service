@@ -1,4 +1,4 @@
-package ru.vpavlova;
+package ru.vpavlova.logstarter.filter;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.client.ExchangeFilterFunction;

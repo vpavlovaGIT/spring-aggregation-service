@@ -1,4 +1,4 @@
-package ru.vpavlova;
+package ru.vpavlova.logstarter.filter;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;

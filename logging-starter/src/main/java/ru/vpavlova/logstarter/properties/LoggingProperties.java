@@ -1,4 +1,4 @@
-package ru.vpavlova;
+package ru.vpavlova.logstarter.properties;
 
 import lombok.Getter;
 import lombok.Setter;
