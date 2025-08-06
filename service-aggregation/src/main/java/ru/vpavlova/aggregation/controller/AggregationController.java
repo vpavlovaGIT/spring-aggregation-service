@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import ru.vpavlova.aggregation.dto.Request;
-import ru.vpavlova.aggregation.dto.Response;
+import ru.vpavlova.aggregation.dto.AggregatedServiceRequest;
+import ru.vpavlova.aggregation.dto.AggregatedServiceResponse;
 import ru.vpavlova.aggregation.service.AggregationService;
 
 @RestController
@@ -30,13 +30,13 @@ public class AggregationController {
             requestBody = @RequestBody(
                     required = true,
                     description = "Объект с параметрами для запроса",
-                    content = @Content(schema = @Schema(implementation = Request.class))
+                    content = @Content(schema = @Schema(implementation = AggregatedServiceRequest.class))
             ),
             responses = {
                     @ApiResponse(
                             responseCode = "200",
                             description = "Успешный ответ с данными от двух сервисов",
-                            content = @Content(schema = @Schema(implementation = Response.class))
+                            content = @Content(schema = @Schema(implementation = AggregatedServiceResponse.class))
                     ),
                     @ApiResponse(
                             responseCode = "404",
@@ -44,7 +44,7 @@ public class AggregationController {
                     )
             }
     )
-    public Mono<ResponseEntity<Response>> aggregateData(@RequestBody Request requestModel) {
+    public Mono<ResponseEntity<AggregatedServiceResponse>> aggregateData(@RequestBody AggregatedServiceRequest requestModel) {
         return aggregationService.aggregateData(requestModel.getParam())
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());

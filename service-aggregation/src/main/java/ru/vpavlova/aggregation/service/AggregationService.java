@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import ru.vpavlova.aggregation.config.ExternalServiceProperties;
-import ru.vpavlova.aggregation.dto.Response;
+import ru.vpavlova.aggregation.dto.AggregatedServiceResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -14,7 +14,7 @@ public class AggregationService {
     private final WebClient.Builder webClientBuilder;
     private final ExternalServiceProperties properties;
 
-    public Mono<Response> aggregateData(String param) {
+    public Mono<AggregatedServiceResponse> aggregateData(String param) {
         Mono<String> firstServiceResponse = webClientBuilder.build()
                 .get()
                 .uri(properties.getFirstServiceUrl() + "?param=" + param)
@@ -28,6 +28,6 @@ public class AggregationService {
                 .bodyToMono(String.class);
 
         return Mono.zip(firstServiceResponse, secondServiceResponse)
-                .map(tuple -> new Response(tuple.getT1(), tuple.getT2()));
+                .map(tuple -> new AggregatedServiceResponse(tuple.getT1(), tuple.getT2()));
     }
 }

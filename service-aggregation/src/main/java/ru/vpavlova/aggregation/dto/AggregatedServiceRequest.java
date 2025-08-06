@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "Модель запроса с параметром")
-public class Request {
+@Schema(description = "Запрос для отправки параметра во внешние сервисы")
+public class AggregatedServiceRequest {
 
     @Schema(description = "Параметр запроса, который будет передан сторонним сервисам", example = "123")
     private String param;

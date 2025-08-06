@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Schema(description = "Агрегированный ответ от двух внешних сервисов")
-public class Response {
+@Schema(description = "Агрегированные данные от внешних сервисов")
+public class AggregatedServiceResponse {
 
     @Schema(description = "Ответ от первого сервиса", example = "value1")
     private String dataFromFirstService;
