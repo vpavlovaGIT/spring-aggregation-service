@@ -17,13 +17,12 @@ external-services:
 # Настройки OpenAPI (Springdoc)
 springdoc:
   api-docs:
+    enabled: true
     path: /v3/api-docs
   swagger-ui:
+    enabled: true
     path: /swagger-ui.html
-  info:
-    title: Aggregation Service API
-    version: 1.0.0
-    description: Сервис агрегации данных из внешних источников
+    url: /openapi/aggregation-api.yaml
 
 logging:
   starter:

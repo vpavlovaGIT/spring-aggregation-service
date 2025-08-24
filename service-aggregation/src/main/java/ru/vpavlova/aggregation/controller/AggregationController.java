@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
-import ru.vpavlova.aggregation.dto.AggregatedServiceRequest;
-import ru.vpavlova.aggregation.dto.AggregatedServiceResponse;
 import ru.vpavlova.aggregation.service.AggregationService;
+import ru.vpavlova.serviceaggregation.model.AggregatedServiceRequest;
+import ru.vpavlova.serviceaggregation.model.AggregatedServiceResponse;
 
 @RestController
 @RequestMapping("/api/aggregate")

@@ -6,7 +6,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Scheduler;
 import ru.vpavlova.aggregation.config.ExternalServiceProperties;
-import ru.vpavlova.aggregation.dto.AggregatedServiceResponse;
+import ru.vpavlova.serviceaggregation.model.AggregatedServiceResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +32,11 @@ public class AggregationService {
                 .subscribeOn(blockingScheduler);
 
         return Mono.zip(firstServiceResponse, secondServiceResponse)
-                .map(tuple -> new AggregatedServiceResponse(tuple.getT1(), tuple.getT2()));
+                .map(tuple -> {
+                    AggregatedServiceResponse response = new AggregatedServiceResponse();
+                    response.setDataFromFirstService(tuple.getT1());
+                    response.setDataFromSecondService(tuple.getT2());
+                    return response;
+                });
     }
 }
