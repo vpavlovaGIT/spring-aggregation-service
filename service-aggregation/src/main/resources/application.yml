@@ -9,6 +9,34 @@ spring:
     reactive:
       base-path: /api
 
+  datasource:
+    url: jdbc:postgresql://localhost:5432/service_db
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+kafka:
+  bootstrap-servers: localhost:9092
+  producer-topic: aggregation-results
+  consumer-topic: input-topic
+  group-id: aggregation-group
+
+outbox:
+  topic: aggregation-results
+  batch-size: 100
+  thread-pool: 10
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,info
+
 # Настройки внешних сервисов
 external-services:
   first-service-url: http://first-service/api/data
