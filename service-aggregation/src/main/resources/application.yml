@@ -68,7 +68,4 @@ resilience4j.circuitbreaker:
 
 logging:
   starter:
-    log-controllers: true
-    log-services: true
-    log-web-requests: true
-    log-level: INFO
+    log-web: true

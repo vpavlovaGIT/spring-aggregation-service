@@ -8,19 +8,25 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
-public class LoggingWebFilter implements Filter {
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.server.ServerWebExchange;
+import org.springframework.web.server.WebFilter;
+import org.springframework.web.server.WebFilterChain;
+import reactor.core.publisher.Mono;
+
+public class LoggingWebFilter implements WebFilter {
+
     private static final Logger log = LoggerFactory.getLogger(LoggingWebFilter.class);
 
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-            throws IOException, ServletException {
-        HttpServletRequest req = (HttpServletRequest) request;
-        log.info("Incoming: {} {}", req.getMethod(), req.getRequestURI());
+    public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        log.info("Incoming: {} {}", exchange.getRequest().getMethod(), exchange.getRequest().getURI());
 
-        chain.doFilter(request, response);
-
-        HttpServletResponse res = (HttpServletResponse) response;
-        log.info("Outgoing: {}", res.getStatus());
+        return chain.filter(exchange)
+                .doOnSuccess((done) ->
+                        log.info("Outgoing: {}", exchange.getResponse().getStatusCode()));
     }
 }
+
 
