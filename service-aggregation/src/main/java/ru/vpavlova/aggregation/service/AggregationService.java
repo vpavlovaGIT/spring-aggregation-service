@@ -1,6 +1,8 @@
 package ru.vpavlova.aggregation.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -21,22 +23,40 @@ public class AggregationService {
     private final OutboxRepository outboxRepository;
     private final ObjectMapper objectMapper;
 
-    public Mono<AggregatedServiceResponse> aggregateData(String param) {
-        WebClient client = webClientBuilder.build();
-
-        Mono<String> firstServiceResponse = client.get()
+    @CircuitBreaker(name = "firstService", fallbackMethod = "firstServiceFallback")
+    public Mono<String> callFirstService(String param) {
+        return webClientBuilder.build()
+                .get()
                 .uri(properties.getFirstServiceUrl() + "?param=" + param)
                 .retrieve()
                 .bodyToMono(String.class)
                 .subscribeOn(blockingScheduler);
+    }
 
-        Mono<String> secondServiceResponse = client.get()
+    @CircuitBreaker(name = "secondService", fallbackMethod = "secondServiceFallback")
+    public Mono<String> callSecondService(String param) {
+        return webClientBuilder.build()
+                .get()
                 .uri(properties.getSecondServiceUrl() + "?param=" + param)
                 .retrieve()
                 .bodyToMono(String.class)
                 .subscribeOn(blockingScheduler);
+    }
 
-        return Mono.zip(firstServiceResponse, secondServiceResponse)
+    // Fallback-методы (важно: сигнатура + Throwable)
+    private Mono<String> firstServiceFallback(String param, Throwable ex) {
+        return Mono.just("Default data from FIRST service for param " + param);
+    }
+
+    private Mono<String> secondServiceFallback(String param, Throwable ex) {
+        return Mono.just("Default data from SECOND service for param " + param);
+    }
+
+    public Mono<AggregatedServiceResponse> aggregateData(String param) {
+        Mono<String> first = callFirstService(param);
+        Mono<String> second = callSecondService(param);
+
+        return Mono.zip(first, second)
                 .map(tuple -> {
                     AggregatedServiceResponse response = new AggregatedServiceResponse();
                     response.setDataFromFirstService(tuple.getT1());
@@ -45,7 +65,11 @@ public class AggregationService {
                 })
                 .flatMap(response -> Mono.fromCallable(() -> {
                                     OutboxEvent outbox = new OutboxEvent();
-                                    outbox.setPayload(objectMapper.writeValueAsString(response));
+                                    try {
+                                        outbox.setPayload(objectMapper.writeValueAsString(response));
+                                    } catch (JsonProcessingException e) {
+                                        throw new RuntimeException(e);
+                                    }
                                     return outboxRepository.save(outbox);
                                 })
                                 .subscribeOn(blockingScheduler)

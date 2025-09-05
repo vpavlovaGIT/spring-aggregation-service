@@ -45,6 +45,7 @@ external-services:
 # Настройки OpenAPI (Springdoc)
 springdoc:
   api-docs:
+
     enabled: true
     path: /v3/api-docs
   swagger-ui:
@@ -52,9 +53,27 @@ springdoc:
     path: /swagger-ui.html
     url: /openapi/aggregation-api.yaml
 
+# Настройки Resilience4j
+resilience4j.circuitbreaker:
+  instances:
+    firstService:
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10s
+      permittedNumberOfCallsInHalfOpenState: 3
+      slowCallRateThreshold: 50
+      slowCallDurationThreshold: 2s
+
+    secondService:
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      failureRateThreshold: 50
+      waitDurationInOpenState: 10s
+      permittedNumberOfCallsInHalfOpenState: 3
+      slowCallRateThreshold: 50
+      slowCallDurationThreshold: 2s
+
 logging:
   starter:
-    log-controllers: true
-    log-services: true
-    log-web-requests: true
-    log-level: INFO
+    log-web: true
