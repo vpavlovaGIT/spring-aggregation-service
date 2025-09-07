@@ -31,7 +31,7 @@ public class KafkaConfig {
 
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
-        Map<String, Object> props = new HashMap<>();
+        var props = new HashMap<String, Object>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
@@ -46,7 +46,7 @@ public class KafkaConfig {
 
     @Bean
     public ProducerFactory<String, String> stringProducerFactory() {
-        Map<String, Object> props = new HashMap<>();
+        var props = new HashMap<String, Object>();
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -56,10 +56,10 @@ public class KafkaConfig {
 
     @Bean
     public ConsumerFactory<String, IncomingEvent> consumerFactory() {
-        JsonDeserializer<IncomingEvent> deserializer = new JsonDeserializer<>(IncomingEvent.class);
+        var deserializer = new JsonDeserializer<>(IncomingEvent.class);
         deserializer.addTrustedPackages("*");
 
-        Map<String, Object> props = new HashMap<>();
+        var props = new HashMap<String, Object>();
         props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
         props.put(ConsumerConfig.GROUP_ID_CONFIG, groupId);
         props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
@@ -71,8 +71,7 @@ public class KafkaConfig {
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, IncomingEvent> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, IncomingEvent> factory =
-                new ConcurrentKafkaListenerContainerFactory<>();
+        var factory = new ConcurrentKafkaListenerContainerFactory<String, IncomingEvent>();
         factory.setConsumerFactory(consumerFactory());
         factory.getContainerProperties().setAckMode(AckMode.MANUAL_IMMEDIATE);
         return factory;

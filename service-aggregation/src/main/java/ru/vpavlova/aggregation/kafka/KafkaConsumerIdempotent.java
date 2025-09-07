@@ -26,12 +26,12 @@ public class KafkaConsumerIdempotent {
             return;
         }
 
-        AggregatedServiceResponse response = aggregationService.aggregateData(event.getParam());
+        var response = aggregationService.aggregateData(event.getParam());
         if (response != null) {
             System.out.println("Aggregated response for param " + event.getParam() + ": " + response);
         }
 
-        ProcessedEvent processed = new ProcessedEvent();
+        var processed = new ProcessedEvent();
         processed.setEventId(event.getId());
         processedEventRepository.save(processed);
     }

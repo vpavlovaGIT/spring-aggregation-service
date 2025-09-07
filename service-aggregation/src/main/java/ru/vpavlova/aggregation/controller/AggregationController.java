@@ -44,10 +44,7 @@ public class AggregationController {
             }
     )
     public ResponseEntity<AggregatedServiceResponse> aggregateData(@RequestBody AggregatedServiceRequest requestModel) {
-        AggregatedServiceResponse response = aggregationService.aggregateData(requestModel.getParam());
-        if (response == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(response);
+        var response = aggregationService.aggregateData(requestModel.getParam());
+        return response == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(response);
     }
 }

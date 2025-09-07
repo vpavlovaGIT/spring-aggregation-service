@@ -55,14 +55,14 @@ public class OutboxScheduler {
     @Scheduled(fixedDelayString = "10000")
     @Transactional
     public void publishOutboxEvents() {
-        List<OutboxEvent> events = repository.findAndLockUnsent(batchSize);
+        var events = repository.findAndLockUnsent(batchSize);
         if (events.isEmpty()) {
             return;
         }
 
         log.info("Found {} unsent outbox events, processing...", events.size());
 
-        List<CompletableFuture<Void>> futures = events.stream()
+        var futures = events.stream()
                 .map(event -> CompletableFuture.runAsync(() -> {
                     try {
                         kafkaTemplate.send(topic, String.valueOf(event.getId()), event.getPayload()).get();
