@@ -52,6 +52,20 @@ springdoc:
     path: /swagger-ui.html
     url: /openapi/aggregation-api.yaml
 
+resilience4j:
+  circuitbreaker:
+    instances:
+      firstService:
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+      secondService:
+        slidingWindowSize: 10
+        minimumNumberOfCalls: 5
+        failureRateThreshold: 50
+        waitDurationInOpenState: 10s
+
 logging:
   starter:
     log-controllers: true
