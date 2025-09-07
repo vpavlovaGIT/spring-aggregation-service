@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Mono;
 import ru.vpavlova.aggregation.service.AggregationService;
 import ru.vpavlova.serviceaggregation.model.AggregatedServiceRequest;
 import ru.vpavlova.serviceaggregation.model.AggregatedServiceResponse;
@@ -44,9 +43,11 @@ public class AggregationController {
                     )
             }
     )
-    public Mono<ResponseEntity<AggregatedServiceResponse>> aggregateData(@RequestBody AggregatedServiceRequest requestModel) {
-        return aggregationService.aggregateData(requestModel.getParam())
-                .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+    public ResponseEntity<AggregatedServiceResponse> aggregateData(@RequestBody AggregatedServiceRequest requestModel) {
+        AggregatedServiceResponse response = aggregationService.aggregateData(requestModel.getParam());
+        if (response == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(response);
     }
 }

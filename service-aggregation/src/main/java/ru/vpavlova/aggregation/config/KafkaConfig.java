@@ -45,6 +45,16 @@ public class KafkaConfig {
     }
 
     @Bean
+    public ProducerFactory<String, String> stringProducerFactory() {
+        Map<String, Object> props = new HashMap<>();
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapServers);
+        props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
+        return new DefaultKafkaProducerFactory<>(props);
+    }
+
+    @Bean
     public ConsumerFactory<String, IncomingEvent> consumerFactory() {
         JsonDeserializer<IncomingEvent> deserializer = new JsonDeserializer<>(IncomingEvent.class);
         deserializer.addTrustedPackages("*");

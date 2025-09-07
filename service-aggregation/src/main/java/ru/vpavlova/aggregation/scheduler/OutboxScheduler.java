@@ -24,7 +24,7 @@ import java.util.concurrent.Executors;
 public class OutboxScheduler {
 
     private final OutboxRepository repository;
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
     private final MeterRegistry meterRegistry;
 
     @Value("${outbox.topic}")

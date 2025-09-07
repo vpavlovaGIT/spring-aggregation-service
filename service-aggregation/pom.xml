@@ -23,10 +23,9 @@
 
     <dependencies>
 
-        <!-- WebFlux -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
         <!-- Lombok -->
@@ -37,10 +36,10 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- OpenAPI для WebFlux -->
+        <!-- OpenAPI для MVC -->
         <dependency>
             <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webflux-ui</artifactId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
             <version>${springdoc.version}</version>
         </dependency>
 
@@ -135,7 +134,7 @@
                                 <skipDefaultInterface>true</skipDefaultInterface>
                                 <useSpringBoot3>true</useSpringBoot3>
                                 <nullable>false</nullable>
-                                <reactive>true</reactive>
+                                <reactive>false</reactive>
                             </configOptions>
                         </configuration>
                     </execution>

@@ -8,16 +8,17 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 @AutoConfiguration
-@ConditionalOnWebApplication
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 @EnableConfigurationProperties(LoggingProperties.class)
 public class LoggingAutoConfiguration {
 
     @Bean
-    @ConditionalOnProperty(name = "logging.starter.log-web", havingValue = "true")
-    public FilterRegistrationBean<LoggingWebFilter> loggingFilterRegistration() {
-        FilterRegistrationBean<LoggingWebFilter> registration = new FilterRegistrationBean<>();
-        registration.setFilter(new LoggingWebFilter());
+    @ConditionalOnProperty(name = "logging.starter.log-web", havingValue = "true", matchIfMissing = true)
+    public FilterRegistrationBean<LoggingServletFilter> loggingFilterRegistration() {
+        FilterRegistrationBean<LoggingServletFilter> registration = new FilterRegistrationBean<>();
+        registration.setFilter(new LoggingServletFilter());
         registration.addUrlPatterns("/*");
+        registration.setOrder(1); 
         return registration;
     }
 }

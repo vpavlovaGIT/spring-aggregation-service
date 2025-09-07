@@ -13,7 +13,7 @@ import ru.vpavlova.serviceaggregation.model.AggregatedServiceResponse;
 @RequiredArgsConstructor
 public class KafkaConsumerIdempotent {
 
-    private final ProcessedEventRepository processedMessageRepository;
+    private final ProcessedEventRepository processedEventRepository;
     private final AggregationService aggregationService;
 
     @KafkaListener(
@@ -22,15 +22,17 @@ public class KafkaConsumerIdempotent {
             containerFactory = "kafkaListenerContainerFactory"
     )
     public void consume(IncomingEvent event) {
-        if (processedMessageRepository.existsById(event.getId())) {
+        if (processedEventRepository.existsById(event.getId())) {
             return;
         }
 
-        AggregatedServiceResponse response = aggregationService.aggregateData(event.getParam()).block();
-        System.out.println("Aggregated response for param " + event.getParam() + ": " + response);
+        AggregatedServiceResponse response = aggregationService.aggregateData(event.getParam());
+        if (response != null) {
+            System.out.println("Aggregated response for param " + event.getParam() + ": " + response);
+        }
 
         ProcessedEvent processed = new ProcessedEvent();
         processed.setEventId(event.getId());
-        processedMessageRepository.save(processed);
+        processedEventRepository.save(processed);
     }
 }
