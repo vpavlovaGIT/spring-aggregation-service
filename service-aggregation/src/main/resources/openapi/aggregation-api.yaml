@@ -1,0 +1,41 @@
+openapi: 3.0.1
+info:
+  title: Aggregation Service API
+  version: "1.0.0"
+  description: Сервис агрегации данных из внешних источников
+paths:
+  /api/aggregate:
+    post:
+      summary: Агрегировать данные из двух внешних сервисов
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AggregatedServiceRequest'
+      responses:
+        '200':
+          description: Успешный ответ с данными от двух сервисов
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AggregatedServiceResponse'
+        '404':
+          description: Данные не найдены
+components:
+  schemas:
+    AggregatedServiceRequest:
+      type: object
+      properties:
+        param:
+          type: string
+          example: "123"
+    AggregatedServiceResponse:
+      type: object
+      properties:
+        dataFromFirstService:
+          type: string
+          example: "value1"
+        dataFromSecondService:
+          type: string
+          example: "value2"
