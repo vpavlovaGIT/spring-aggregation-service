@@ -10,14 +10,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.*;
+import org.springframework.kafka.listener.ContainerProperties;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 import ru.vpavlova.aggregation.dto.IncomingEvent;
 
 import java.util.HashMap;
-import java.util.Map;
-
-import static org.springframework.kafka.listener.ContainerProperties.AckMode;
 
 @EnableKafka
 @Configuration
@@ -73,7 +71,7 @@ public class KafkaConfig {
     public ConcurrentKafkaListenerContainerFactory<String, IncomingEvent> kafkaListenerContainerFactory() {
         var factory = new ConcurrentKafkaListenerContainerFactory<String, IncomingEvent>();
         factory.setConsumerFactory(consumerFactory());
-        factory.getContainerProperties().setAckMode(AckMode.MANUAL_IMMEDIATE);
+        factory.getContainerProperties().setAckMode(ContainerProperties.AckMode.MANUAL);
         return factory;
     }
 }
